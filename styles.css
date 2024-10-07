@@ -1,0 +1,171 @@
+
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Arial Unicode MS', Arial, sans-serif;
+    font-size: 16px; /* Adjust this value to match are.na's font size */
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+
+#blocks-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0px;
+    padding: 0px;
+}
+
+.block {
+    padding: 8px; /* Remove padding from the block */
+    border-radius: 0; /* No border radius */
+    overflow: hidden;
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column-reverse; /* Stack children vertically */
+    justify-content: flex-end; /* Align children to the bottom */
+}
+/*navbar options */
+.navbar {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    color: white;
+    font-family: 'Arial Unicode MS', Arial, sans-serif;
+    font-size: 16px;
+    mix-blend-mode: difference;
+    z-index: 1; /* Ensure the navbar is on top of other elements */
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 90%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transform: scale(5, 2);
+    transform-origin: top left;
+  
+    transition: transform 0.3s ease-in-out; /* Add a smooth transition to the transform property */
+  }
+  @media (max-width: 767px) {
+    .title {
+      transform: scale(1.5, 2);} /* Change the scale for mobile devices */
+
+    }
+    @media (max-width: 1418px) {
+        .title {
+          transform: scale(4, 2);} /* Change the scale for mobile devices */
+    
+        }
+        @media (max-width: 1181px) {
+            .title {
+              transform: scale(3, 2);} /* Change the scale for mobile devices */
+        
+            }
+            @media (max-width: 987px) {
+                .title {
+                  transform: scale(2, 4);} /* Change the scale for mobile devices */
+            
+                }
+  @media (max-width: 778px) {
+    .title {
+      transform: scale(1.1, 2); /* Change the scale for mobile devices */
+    }
+
+    
+
+  }
+  
+  .links {
+    position: fixed;
+    top: 0px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    transform: scale(3, 2);
+    transform-origin: top right;
+  }
+  @media (max-width: 581px) {
+    .links {
+        transform: scale(1.5, 2); /* Change the scale for mobile devices */
+    } }
+    @media (max-width: 1910px) {
+        .links {
+            transform: scale(2.2, 4); /* Change the scale for mobile devices */
+        } 
+}
+   @media (max-width: 1860px) {
+        .links {
+            transform: scale(1.2, 2); /* Change the scale for mobile devices */
+        } 
+}
+@media (max-width: 1212px) {
+    .links {
+        transform: scale(1.2, 2); /* Change the scale for mobile devices */
+    } 
+}
+@media (max-width: 600px) {
+    .links {
+        transform: scale(1, 2); /* Change the scale for mobile devices */
+    } 
+}
+  
+  .links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+  }
+  
+  .links a:hover {
+    text-decoration: underline;
+  }
+  
+.block img {
+    max-width: 100%;
+    border-radius: 0px;
+}
+
+.block a {
+    color: #1e90ff;
+    text-decoration: none;
+}
+
+.block a:hover {
+    text-decoration: underline;
+}
+
+.thumbnail {
+    max-width: 100%;
+    border-radius: 0px;
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+    body {
+        font-size: 12px; /* Set a discrete font size for mobile */
+    }
+
+    #blocks-container {
+        display: grid;
+        grid-template-columns: repeat(2., 1fr); /* Show 2 columns */
+        gap: 0px;
+        padding: 0px;
+    }
+
+    .block {
+        padding: 4px; /* Adjust padding for mobile if needed */
+    }
+    figure{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+        
+}
