@@ -1,0 +1,114 @@
+body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Align player to the bottom */
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: #000000; /* Neon green */
+            text-transform: uppercase; /* Uppercase text */
+        }
+        .audio-player {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            border-top: 1px solid #000000; /* Neon green border */
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        .progress {
+            flex-grow: 1;
+            height: 10px;
+            background: linear-gradient(90deg, #000000, #ff00ff); /* Neon gradient */
+            border-radius: 5px;
+            margin: 0 20px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff, #ff00ff); /* Neon gradient */
+            transition: width 0.1s ease;
+        }
+        .play-button, .file-button, .station-button {
+    width: 100px; /* Adjust width as needed */
+    height: 50px;
+    background: transparent;
+    border: 2px solid #040404;
+    color: #000000;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Hide overflow text */
+    position: relative; /* Position relative for absolute child */
+    margin-left: 10px; /* Add some space between buttons */
+}
+
+.station-button span {
+    display: inline-block; /* Allow the span to be animated */
+    white-space: nowrap; /* Prevent text from wrapping */
+    position: absolute; /* Position absolute to allow scrolling */
+    left: 100%; /* Start off-screen to the right */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s; /* Smooth transition for opacity */
+}
+
+.station-button:hover span {
+    animation: bounce 4s ease-in-out infinite; /* Animation for bouncing */
+    opacity: 1; /* Show the text on hover */
+}
+
+.station-button::before {
+    content: '💎'; /* Default diamond emoji */
+    font-size: 24px; /* Adjust size as needed */
+    position: absolute; /* Position absolute to center it */
+    left: 50%; /* Center horizontally */
+    top: 50%; /* Center vertically */
+    transform: translate(-50%, -50%); /* Center the emoji */
+    transition: opacity 0.3s; /* Smooth transition for opacity */
+}
+
+.station-button:hover::before {
+    opacity: 0; /* Hide the diamond emoji on hover */
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateX(0); /* Start position */
+    }
+    25% {
+        transform: translateX(-100%); /* Move to the left */
+    }
+    50% {
+        transform: translateX(-100%); /* Hold position on the left */
+    }
+    75% {
+        transform: translateX(0); /* Move back to the right */
+    }
+    100% {
+        transform: translateX(0); /* Hold position on the right */
+    }
+}
+
+
+
+        
+        .play-button:hover, .file-button:hover, .station-button:hover {
+            transform: scale(1.1);
+        }
+        .metadata {
+            margin-right: 20px;
+            font-size: 12px;
+        }
+        .volume-control {
+            margin-right: 20px;
+        }
+        .volume-control input {
+            width: 100px; /* Set a fixed width for the volume slider */
+        }
