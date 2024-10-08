@@ -4,9 +4,162 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEDIAPLAYER RADIOS + ADDONS</title>
-    <link rel="stylesheet" href="styleplayer.css"> <!-- Link to player CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
+    <style>body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Align player to the bottom */
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    color: #000000; /* Neon green */
+    text-transform: uppercase; /* Uppercase text */
+}
+.audio-player {
+    width: 98%;
+    background: rgba(255, 255, 255, 0.8);
+    border-top: 1px solid #000000; /* Neon green border */
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
+    position: fixed; /* Change to fixed */
+    bottom: 0; /* Position it at the bottom */
+    left: 0; /* Align to the left */
+    z-index: 1000; /* Ensure it stays above other content */
+}
+.progress {
+    flex-grow: 1;
+    height: 10px;
+    background: linear-gradient(90deg, #000000, #ff00ff); /* Neon gradient */
+    border-radius: 5px;
+    margin: 0 20px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffffff, #ff00ff); /* Neon gradient */
+    transition: width 0.1s ease;
+}
+.play-button, .file-button, .station-button {
+width: 100px; /* Adjust width as needed */
+height: 50px;
+background: transparent;
+border: 2px solid #040404;
+color: #000000;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden; /* Hide overflow text */
+position: relative; /* Position relative for absolute child */
+margin-left: 10px; /* Add some space between buttons */
+}
+
+.station-button span {
+display: inline-block; /* Allow the span to be animated */
+white-space: nowrap; /* Prevent text from wrapping */
+position: absolute; /* Position absolute to allow scrolling */
+left: 100%; /* Start off-screen to the right */
+opacity: 0; /* Initially hidden */
+transition: opacity 0.3s; /* Smooth transition for opacity */
+}
+
+.station-button:hover span {
+animation: bounce 4s ease-in-out infinite; /* Animation for bouncing */
+opacity: 1; /* Show the text on hover */
+}
+
+.station-button::before {
+content: '💎'; /* Default diamond emoji */
+font-size: 24px; /* Adjust size as needed */
+position: absolute; /* Position absolute to center it */
+left: 50%; /* Center horizontally */
+top: 50%; /* Center vertically */
+transform: translate(-50%, -50%); /* Center the emoji */
+transition: opacity 0.3s; /* Smooth transition for opacity */
+}
+
+.station-button:hover::before {
+opacity: 0; /* Hide the diamond emoji on hover */
+}
+
+@keyframes bounce {
+0% {
+transform: translateX(0); /* Start position */
+}
+25% {
+transform: translateX(-100%); /* Move to the left */
+}
+50% {
+transform: translateX(-100%); /* Hold position on the left */
+}
+75% {
+transform: translateX(0); /* Move back to the right */
+}
+100% {
+transform: translateX(0); /* Hold position on the right */
+}
+}
+
+
+
+
+.play-button:hover, .file-button:hover, .station-button:hover {
+    transform: scale(1.1);
+}
+.metadata {
+    margin-right: 20px;
+    font-size: 12px;
+}
+.volume-control {
+    margin-right: 20px;
+}
+.volume-control input {
+    width: 100px; /* Set a fixed width for the volume slider */
+}
+
+.add-station-button {
+    width: 50px; /* Set a fixed width */
+    height: 50px; /* Set a fixed height */
+    background: #ff00ff; /* Background color */
+    color: #ffffff; /* Text color */
+    border: none; /* No border */
+    border-radius: 50%; /* Make it circular */
+    font-size: 24px; /* Font size for the "+" sign */
+    cursor: pointer; /* Pointer cursor on hover */
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    margin-left: 10px; /* Space from the last button */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Add some shadow */
+}
+
+.add-station-button:hover {
+    background: #e600e6; /* Darker shade on hover */
+}
+
+/* Media query for screens with a minimum width of 375px */
+@media (max-width: 375px) {
+    .audio-player {
+        padding: 10px; /* Adjust padding for mobile */
+    }
+
+    .play-button, .file-button, .station-button {
+        width: 70px; /* Further adjust width for mobile */
+        height: 35px; /* Further adjust height for mobile */
+        font-size: 12px; /* Further adjust font size for mobile */
+    }
+
+    .metadata {
+        font-size: 10px; /* Smaller font size for metadata */
+    }
+}</style>
 <body>
     <!-- Player Container -->
     <div class="audio-player">
@@ -35,6 +188,101 @@
 
     <audio id="audio" src="https://s5.radio.co/s21c5fbf27/listen" preload="auto"></audio>
 
-    <script src="player.js"></script> <!-- Link to player JS -->
+    <script>
+        const audio = document.getElementById('audio');
+        const playButton = document.getElementById('playButton');
+        const fileButton = document.getElementById('fileButton');
+        const streamNameElement = document.getElementById('streamName');
+        const         sourceWebsiteElement = document.getElementById('sourceWebsite');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const stationButtons = document.querySelectorAll('.station-button');
+
+        // Set initial volume
+        audio.volume = volumeSlider.value;
+
+        // Update volume based on slider input
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
+
+        // Play button functionality
+        playButton.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playButton.textContent = '❚❚'; // Change to pause icon
+            } else {
+                audio.pause();
+                playButton.textContent = '▶'; // Change to play icon
+            }
+        });
+
+        // Change audio source when a station button is clicked
+        stationButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const newSource = e.target.getAttribute('data-src'); // Get the source from data attribute
+                audio.src = newSource; // Update audio source
+                audio.play(); // Play the new source
+                playButton.textContent = '❚❚'; // Change to pause icon
+                updateMetadata(newSource); // Update metadata display
+            });
+        });
+
+        // Function to update metadata
+        function updateMetadata(source) {
+            const selectedStation = Array.from(stationButtons).find(button => button.getAttribute('data-src') === source).textContent;
+            streamNameElement.textContent = `STREAM: ${selectedStation}`;
+            sourceWebsiteElement.textContent = `SOURCE: ${source}`;
+        }
+
+        // Attempt to get metadata from the stream
+        audio.addEventListener('loadedmetadata', () => {
+            console.log('Metadata loaded');
+            updateMetadata(audio.src); // Update metadata when loaded
+        });
+
+        // Initialize metadata on page load
+        updateMetadata(audio.src);
+
+        // File button functionality to play fields.mp3
+        fileButton.addEventListener('click', () => {
+            audio.src = 'Trasim_KINKED.mp3'; // Set the audio source to fields.mp3
+            audio.play(); // Play the audio file
+            playButton.textContent = '❚❚'; // Change to pause icon
+            streamNameElement.textContent = 'STREAM: slow water and couff, Trasimeno_KINKED.mp3'; // Update stream name
+            sourceWebsiteElement.textContent = 'SOURCE: .mp3'; // Update source website
+        });
+        
+        document.getElementById('addStationButton').addEventListener('click', function() {
+            const stationName = prompt("Enter the name of the new radio station:");
+            const stationURL = prompt("Enter the URL of the new radio station:");
+        
+            if (stationName && stationURL) {
+                // Crea un nuovo pulsante per la nuova stazione
+                const newStationButton = document.createElement('button');
+                newStationButton.className = 'station-button';
+                newStationButton.setAttribute('data-src', stationURL);
+                newStationButton.innerHTML = `<span>${stationName}</span>`;
+        
+                // Aggiungi il nuovo pulsante all'audio player
+                document.querySelector('.audio-player').appendChild(newStationButton);
+        
+                // Aggiungi funzionalità al nuovo pulsante (simile ai pulsanti esistenti)
+                newStationButton.addEventListener('click', function() {
+                    const audio = document.getElementById('audio');
+                    audio.src = stationURL; // Aggiorna la sorgente audio
+                    audio.play(); // Riproduci la nuova sorgente
+                    document.getElementById('playButton').textContent = '❚❚'; // Cambia all'icona di pausa
+                    updateMetadata(stationURL); // Aggiorna la visualizzazione dei metadati
+                });
+            }
+        });
+        
+        // Funzione per aggiornare i metadati
+        function updateMetadata(source) {
+            const selectedStation = Array.from(document.querySelectorAll('.station-button')).find(button => button.getAttribute('data-src') === source).textContent;
+            document.getElementById('streamName').textContent = `STREAM: ${selectedStation}`;
+            document.getElementById('sourceWebsite').textContent = `SOURCE: ${source}`;
+        }
+        </script> <!-- Link to player JS -->
 </body>
 </html>
