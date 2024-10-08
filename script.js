@@ -1,14 +1,14 @@
-const channelSlug = 'strajk'; // Channel slug
-const apiUrl = `https://api.are.na/v2/channels/${channelSlug}/contents?per=10000`; // Fetch 10000 blocks per request
+const channelSlug = 'test-formati';// Channel slug
+const apiUrl = `https://api.are.na/v2/channels/${channelSlug}/contents?per=1000`; // Fetch 1000 blocks per request
 let totalBlocks = []; // Array to hold all blocks
 const channelLink = document.getElementById('channel-link');
 channelLink.textContent = channelSlug;
 
-  window.addEventListener('load', () => {
+  /*window.addEventListener('load', () => {
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }, 7000); // Delay the scrolling action by 5 seconds
-  });
+  });*/
   
 async function fetchChannelContents(page = 1) {
     try {
@@ -17,10 +17,10 @@ async function fetchChannelContents(page = 1) {
         totalBlocks = totalBlocks.concat(data.contents); // Concatenate new blocks
 
         // Check if we need to fetch more pages
-        if (data.total_pages > page && totalBlocks.length < 3000) {
-            await fetchChannelContents(page + 1); // Fetch next page
+        if (data.total_pages > page && totalBlocks.length < 8000) {
+            await fetchChannelContents(page + 9); // Fetch next page
         } else {
-            displayBlocks(totalBlocks.slice(0, 3000)); // Display up to 3000 blocks
+            displayBlocks(totalBlocks.slice(0, 8000)); // Display up to 3000 blocks
         }
     } catch (error) {
         console.error('Error fetching channel contents:', error);
@@ -62,6 +62,7 @@ function displayBlocks(blocks) {
         } else if (block.class === 'Media') {
             blockElement.innerHTML = `<h3>${block.title || 'Untitled'}</h3><iframe src="${block.source.url}" frameborder="0" allowfullscreen></iframe>`;
         }
+        
 
         blocksContainer.appendChild(blockElement);
     });
@@ -69,3 +70,5 @@ function displayBlocks(blocks) {
 
 // Fetch channel contents on page load
 fetchChannelContents();
+
+
