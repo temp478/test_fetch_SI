@@ -9,3 +9,4 @@ about us will be very easy
 
 perhaps this website works as a homepage for every release?
 like "this is the new release" kind of?
+there is also a mediaplayer which needs to become a dsp for gaining live
