@@ -5,22 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEMP478 visualizer from Are.na</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styleplayer.css"> <!-- Link to player CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body autoscroll="autoscroll">
     <div id="blocks-container"></div>
     <div class="navbar">
-      <div class="title">SOLIDE INCANTI<br>records</div>
-      <div class="links">
-        <a href="about.html">ˆabout usˆ </a>
-        <span> &ensp;&ensp;&ensp;release name &rarr;</span><a href="#" id="channel-link">name-channel-of-reference</a>
-      </div>
+        <div class="title">SOLIDE INCANTI<br>records</div>
+        <div class="links">
+            <a href="about.html">ˆabout usˆ </a>
+            <span> &ensp;&ensp;&ensp;release name &rarr;</span><a href="#" id="channel-link">name-channel-of-reference</a>
+        </div>
     </div>
-    <script src="script.js"></script>
-    
-<script src="script.js"></script>
 
-    <div id="blocks-container"></div>
+    <!-- Player Container -->
+    <div class="audio-player">
+        <div class="volume-control">
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+        </div>
+        <div class="metadata" id="metadata">
+            <div id="streamName">STREAM: LOADING...</div>
+            <div id="sourceWebsite">SOURCE: LOADING...</div>
+        </div>
+        <div class="progress" id="progress">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <button class="play-button" id="playButton">▶</button>
+        <button class="file-button" id="fileButton">🌱</button> <!-- Button for fields.mp3 -->
+        
+        <!-- Station buttons -->
+        <button class="station-button" data-src="https://s5.radio.co/s21c5fbf27/listen"><span>EOS Radio</span></button>
+        <button class="station-button" data-src="https://c11.radioboss.fm:18270/stream"><span>Internet Public Radio</span></button>
+        <button class="station-button" data-src="https://stream.resonance.fm/resonance-extra"><span>ResonanceExtra</span></button>
+        <button class="station-button" data-src="https://radio.syg.ma/audio.ogg"><span>RadioSygma</span></button>
+       <!-- New button for adding stations -->
+    <button class="add-station-button" id="addStationButton">+</button>
+</div>
+    </div>
+
+    <audio id="audio" src="https://s5.radio.co/s21c5fbf27/listen" preload="auto"></audio>
+
     <script src="script.js"></script>
+    <script src="player.js"></script> <!-- Link to player JS -->
 </body>
 </html>
