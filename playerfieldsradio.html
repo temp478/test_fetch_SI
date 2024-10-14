@@ -144,30 +144,92 @@ transform: translateX(0); /* Hold position on the right */
 .add-station-button:hover {
     background: #e600e6; /* Darker shade on hover */
 }
-
-/* Media query for screens with a minimum width of 375px */
-@media (max-width: 375px) {
-    .audio-player {
-        padding: 10px; /* Adjust padding for mobile */
+/* Mobile styles for screens with a maximum width of 375px */
+@media (max-width: 790px) {
+    body {
+        margin-top: 20%;
+        margin-bottom: 20%;
+        margin-left: 5%;
+        margin-right: 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center; /* Center items vertically */
+        height: 100vh;
+        background-color: black; /* Set background to black */
+        font-family: 'Arial', sans-serif;
+        color: #ffffff; /* Change text color to white for contrast */
+        text-transform: uppercase; /* Uppercase text */
     }
 
-    .play-button, .file-button, .station-button {
-        width: 70px; /* Further adjust width for mobile */
-        height: 35px; /* Further adjust height for mobile */
-        font-size: 12px; /* Further adjust font size for mobile */
+    .audio-player {
+        width: 90%; /* Adjust width for mobile */
+        background: rgb(0, 0, 0); /* Slightly transparent background */
+        border: 1px solid #ffffff; /* White border for visibility */
+        display: flex;
+        flex-direction: column; /* Stack items vertically */
+        align-items: center; /* Center items horizontally */
+        padding: 20px; /* Padding for spacing */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        position: relative; /* Change to relative for centering */
+        z-index: 1000; /* Ensure it stays above other content */
+    }
+
+    .progress {
+        width: 100%; /* Full width for progress bar */
+        height: 10px;
+        background: linear-gradient(90deg, #000000, #ff00ff); /* Neon gradient */
+        border-radius: 5px;
+        margin: 10px 0; /* Adjust margin for spacing */
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffffff, #ff00ff); /* Neon gradient */
+        transition: width 0.1s ease;
+    }
+
+    .play-button, .file-button, .station-button, .add-station-button {
+        width: 80%; /* Full width for buttons */
+        height: 50px; /* Height for buttons */
+        background: transparent;
+        border: 2px solid #ffffff; /* White border */
+        color: #ffffff; /* White text */
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px 0; /* Space between buttons */
+    }
+
+    .play-button:hover, .file-button:hover, .station-button:hover, .add-station-button:hover {
+        transform: scale(1.05); /* Slightly scale on hover */
+        background: rgba(255, 255, 255, 0.2); /* Light background on hover */
     }
 
     .metadata {
-        font-size: 10px; /* Smaller font size for metadata */
+        margin: 10px 0; /* Space for metadata */
+        font-size: 14px; /* Font size for metadata */
+        text-align: center; /* Center text */
     }
-}</style>
+
+    .volume-control {
+        display: none; /* Hide the volume control for mobile devices */
+    }
+
+}
+
+
+</style>
 <body>
-                <audio id="audio" src="trasim_KINKED.mp3" preload="auto" autoplay loop></audio>
+                <audio id="audio" src="trasim_KINKED.mp3" preload="auto" loop></audio>
     <!-- Player Container -->
     <div class="audio-player">
         <div class="volume-control">
             <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
         </div>
+        
         <div class="metadata" id="metadata">
             <div id="streamName">STREAM: LOADING...</div>
             <div id="sourceWebsite">SOURCE: LOADING...</div>
@@ -179,10 +241,14 @@ transform: translateX(0); /* Hold position on the right */
         <button class="file-button" id="fileButton">🌱</button> <!-- Button for fields.mp3 -->
 
         <!-- Station buttons -->
+        <button class="station-button" data-src="https://stream.resonance.fm/resonance-extra"><span>ResonanceExtra</span></button>
+        <button class="station-button" data-src="https://cashmereradio.out.airtime.pro/cashmereradio_b"><span>CASHMERE</span></button>
+        <button class="station-button" data-src="https://radio.syg.ma/audio.ogg"><span>RadioSygma</span></button>
+        <button class="station-button" data-src="https://icecast.lyl.live/live"><span>LYL</span></button>
         <button class="station-button" data-src="https://s5.radio.co/s21c5fbf27/listen"><span>EOS Radio</span></button>
         <button class="station-button" data-src="https://c11.radioboss.fm:18270/stream"><span>Internet Public Radio</span></button>
-        <button class="station-button" data-src="https://stream.resonance.fm/resonance-extra"><span>ResonanceExtra</span></button>
-        <button class="station-button" data-src="https://radio.syg.ma/audio.ogg"><span>RadioSygma</span></button>
+        
+
        <!-- New button for adding stations -->
     <button class="add-station-button" id="addStationButton">+</button>
 </div>
@@ -247,44 +313,58 @@ transform: translateX(0); /* Hold position on the right */
 
         // File button functionality to play fields.mp3
         fileButton.addEventListener('click', () => {
-            audio.src = 'Trasim_KINKED.mp3'; // Set the audio source to fields.mp3
-            audio.play(); // Play the audio file
+    audio.src = 'Trasim_KINKED.mp3'; // Set the audio source to fields.mp3
+    audio.play(); // Play the audio file
+    playButton.textContent = '❚❚'; // Change to pause icon
+    streamNameElement.textContent = 'STREAM: Trasimeno_KINKED.mp3'; // Update stream name
+    sourceWebsiteElement.textContent = 'SOURCE: .mp3'; // Update source website
+});
+
+        
+document.getElementById('addStationButton').addEventListener('click', function() {
+    const stationName = prompt("Enter the name of the new radio station:");
+    const stationURL = prompt("Enter the URL of the new radio station:");
+
+    if (stationName && stationURL) {
+        const newStationButton = document.createElement('button');
+        newStationButton.className = 'station-button';
+        newStationButton.setAttribute('data-src', stationURL);
+        newStationButton.innerHTML = `<span>${stationName}</span>`;
+        document.querySelector('.audio-player').appendChild(newStationButton);
+
+        // Log to confirm button creation
+        console.log(`Added new station: ${stationName} with URL: ${stationURL}`);
+
+        newStationButton.addEventListener('click', function() {
+            audio.src = stationURL; // Update audio source
+            audio.play(); // Play the new source
             playButton.textContent = '❚❚'; // Change to pause icon
-            streamNameElement.textContent = 'STREAM: slow water and couff, Trasimeno_KINKED.mp3'; // Update stream name
-            sourceWebsiteElement.textContent = 'SOURCE: .mp3'; // Update source website
+            updateMetadata(stationURL); // Update metadata display
         });
-        
-        document.getElementById('addStationButton').addEventListener('click', function() {
-            const stationName = prompt("Enter the name of the new radio station:");
-            const stationURL = prompt("Enter the URL of the new radio station:");
-        
-            if (stationName && stationURL) {
-                // Crea un nuovo pulsante per la nuova stazione
-                const newStationButton = document.createElement('button');
-                newStationButton.className = 'station-button';
-                newStationButton.setAttribute('data-src', stationURL);
-                newStationButton.innerHTML = `<span>${stationName}</span>`;
-        
-                // Aggiungi il nuovo pulsante all'audio player
-                document.querySelector('.audio-player').appendChild(newStationButton);
-        
-                // Aggiungi funzionalità al nuovo pulsante (simile ai pulsanti esistenti)
-                newStationButton.addEventListener('click', function() {
-                    const audio = document.getElementById('audio');
-                    audio.src = stationURL; // Aggiorna la sorgente audio
-                    audio.play(); // Riproduci la nuova sorgente
-                    document.getElementById('playButton').textContent = '❚❚'; // Cambia all'icona di pausa
-                    updateMetadata(stationURL); // Aggiorna la visualizzazione dei metadati
-                });
-            }
-        });
+    } else {
+        console.log("Station name or URL was not provided.");
+    }
+});
+
+
+
         
         // Funzione per aggiornare i metadati
         function updateMetadata(source) {
-            const selectedStation = Array.from(document.querySelectorAll('.station-button')).find(button => button.getAttribute('data-src') === source).textContent;
-            document.getElementById('streamName').textContent = `STREAM: ${selectedStation}`;
-            document.getElementById('sourceWebsite').textContent = `SOURCE: ${source}`;
-        }
+    const selectedStationButton = Array.from(stationButtons).find(button => button.getAttribute('data-src') === source);
+    
+    if (selectedStationButton) {
+        const selectedStation = selectedStationButton.textContent;
+        streamNameElement.textContent = `STREAM: ${selectedStation}`;
+        sourceWebsiteElement.textContent = `SOURCE: ${source}`;
+    } else {
+        // Handle the case where the source does not match any station
+        streamNameElement.textContent = `STREAM: Unknown Station`;
+        sourceWebsiteElement.textContent = `SOURCE: ${source}`;
+    }
+}
+
+
         </script> <!-- Link to player JS -->
 </body>
 </html>
