@@ -19,12 +19,12 @@
 }
 .audio-player {
     width: 98%;
-    background: rgba(255, 255, 255, 0.8);
+    background-color: #00000000;
     border-top: 1px solid #000000; /* Neon green border */
     display: flex;
     align-items: center;
     padding: 20px;
-    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
+    border-radius: 10%;
     position: fixed; /* Change to fixed */
     bottom: 0; /* Position it at the bottom */
     left: 0; /* Align to the left */
@@ -36,7 +36,7 @@
     background: linear-gradient(90deg, #000000, #ff00ff); /* Neon gradient */
     border-radius: 5px;
     margin: 0 20px;
-    cursor: pointer;
+    cursor: crosshair;
     position: relative;
     overflow: hidden;
 }
@@ -223,7 +223,7 @@ transform: translateX(0); /* Hold position on the right */
 
 </style>
 <body>
-                <audio id="audio" src="trasim_KINKED.mp3" preload="auto" loop></audio>
+                <audio id="audio" src="trasim_KINKED.mp3" preload="auto" autoplay loop></audio>
     <!-- Player Container -->
     <div class="audio-player">
         <div class="volume-control">
