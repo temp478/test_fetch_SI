@@ -16,10 +16,32 @@
     font-family: 'Arial', sans-serif;
     color: #000000; /* Neon green */
     text-transform: uppercase; /* Uppercase text */
+    overflow: hidden;
+
+}
+.station-name {
+    display: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+.metadata {
+    position: absolute;
+    bottom: 100px; /* changed to 0 to align to the bottom */
+    left: 50%; /* added to center horizontally */
+    transform: translateX(-50%); /* added to center horizontally */
+    border-radius: 10px;
+    border-color: #000000;
+    background-color: #fff170;
+    border-width: 1px;
+    border-style: double;
+    padding: 10px;
+    max-width: 100%; /* or any other fixed width value */
+    min-width: 60%;
+    mix-blend-mode: difference;
 }
 .audio-player {
-    width: 98%;
-    background-color: #FFF170;
+    width: 98%; /* or any other fixed width value */    background-color: #FFF170;
     border: 1px solid #000000; /* Neon green border */
     display: flex;
     align-items: center;
@@ -53,7 +75,7 @@ border: 2px solid #040404;
 color: #000000;
 border-radius: 5px;
 cursor: pointer;
-font-size: 16px;
+font-size: 46px;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -68,27 +90,32 @@ white-space: nowrap; /* Prevent text from wrapping */
 position: absolute; /* Position absolute to allow scrolling */
 left: 100%; /* Start off-screen to the right */
 opacity: 0; /* Initially hidden */
-transition: opacity 0.3s; /* Smooth transition for opacity */
-}
-
-.station-button:hover span {
-animation: bounce 4s ease-in-out infinite; /* Animation for bouncing */
-opacity: 1; /* Show the text on hover */
+transition: opacity 0.1s; /* Smooth transition for opacity */
 }
 
 .station-button::before {
-content: '💎'; /* Default diamond emoji */
-font-size: 24px; /* Adjust size as needed */
-position: absolute; /* Position absolute to center it */
-left: 50%; /* Center horizontally */
-top: 50%; /* Center vertically */
-transform: translate(-50%, -50%); /* Center the emoji */
-transition: opacity 0.3s; /* Smooth transition for opacity */
-}
+        content: attr(data-number); /* Display the number instead of the diamond emoji */
+        font-size: 100px; /* Adjust size as needed */
+        position: absolute; /* Position absolute to center it */
+        left: 50%; /* Center horizontally */
+        top: 50%; /* Center vertically */
+        transform: translate(-50%, -50%); /* Center the number */
+        transition: opacity 0.3s; /* Smooth transition for opacity */
+    }
 
 .station-button:hover::before {
-opacity: 0; /* Hide the diamond emoji on hover */
-}
+        opacity: 0; /* Hide the number on hover */
+    }
+
+    
+    @keyframes glow {
+        0%, 100% {
+            text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff; /* Brightest glow */
+        }
+        50% {
+            text-shadow: 0 0 10px #ff00ff, 0 0 15px #ff00ff, 0 0 20px #ff00ff; /* Dimmer glow */
+        }
+    }
 
 @keyframes bounce {
 0% {
@@ -111,12 +138,11 @@ transform: translateX(0); /* Hold position on the right */
 
 
 
-.play-button:hover, .file-button:hover, .station-button:hover {
-    transform: scale(1.1);
-}
+
 .metadata {
     margin-right: 20px;
-    font-size: 12px;
+    font-size: 20px;
+    
 }
 .volume-control {
     margin-right: 20px;
@@ -209,8 +235,8 @@ transform: translateX(0); /* Hold position on the right */
     }
 
     .metadata {
-        margin: 10px 0; /* Space for metadata */
-        font-size: 14px; /* Font size for metadata */
+        margin: 8px 0; /* Space for metadata */
+        font-size: 10px; /* Font size for metadata */
         text-align: center; /* Center text */
     }
 
@@ -230,7 +256,7 @@ transform: translateX(0); /* Hold position on the right */
             <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
         </div>
         
-        <div class="metadata" id="metadata">
+        <div class="metadata" id="metadata" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <div id="streamName">STREAM: LOADING...</div>
             <div id="sourceWebsite">SOURCE: LOADING...</div>
         </div>
@@ -271,9 +297,14 @@ transform: translateX(0); /* Hold position on the right */
         const playButton = document.getElementById('playButton');
         const fileButton = document.getElementById('fileButton');
         const streamNameElement = document.getElementById('streamName');
-        const         sourceWebsiteElement = document.getElementById('sourceWebsite');
+        const sourceWebsiteElement = document.getElementById('sourceWebsite');
         const volumeSlider = document.getElementById('volumeSlider');
         const stationButtons = document.querySelectorAll('.station-button');
+
+// Update the station buttons with numbers
+stationButtons.forEach((button, index) => {
+    button.setAttribute('data-number', index + 1); // Set the data-number attribute
+});
 
         // Set initial volume
         audio.volume = volumeSlider.value;
@@ -305,12 +336,19 @@ transform: translateX(0); /* Hold position on the right */
             });
         });
 
-        // Function to update metadata
         function updateMetadata(source) {
-            const selectedStation = Array.from(stationButtons).find(button => button.getAttribute('data-src') === source).textContent;
-            streamNameElement.textContent = `STREAM: ${selectedStation}`;
-            sourceWebsiteElement.textContent = `SOURCE: ${source}`;
-        }
+    const selectedStationButton = Array.from(stationButtons).find(button => button.getAttribute('data-src') === source);
+    
+    if (selectedStationButton) {
+        const selectedStation = selectedStationButton.textContent;
+        streamNameElement.textContent = `STREAM: ${selectedStation}`;
+        sourceWebsiteElement.textContent = `SOURCE: ${source}`;
+    } else {
+        // Handle the case where the source does not match any station
+        streamNameElement.textContent = `STREAM: Unknown Station`;
+        sourceWebsiteElement.textContent = `SOURCE: ${source}`;
+    }
+}
 
         // Attempt to get metadata from the stream
         audio.addEventListener('loadedmetadata', () => {
@@ -359,20 +397,20 @@ document.getElementById('addStationButton').addEventListener('click', function()
 
 
         
-        // Funzione per aggiornare i metadati
+        // Update the stream name to be bold and 3 sizes larger
         function updateMetadata(source) {
-    const selectedStationButton = Array.from(stationButtons).find(button => button.getAttribute('data-src') === source);
-    
-    if (selectedStationButton) {
-        const selectedStation = selectedStationButton.textContent;
-        streamNameElement.textContent = `STREAM: ${selectedStation}`;
-        sourceWebsiteElement.textContent = `SOURCE: ${source}`;
-    } else {
-        // Handle the case where the source does not match any station
-        streamNameElement.textContent = `STREAM: Unknown Station`;
-        sourceWebsiteElement.textContent = `SOURCE: ${source}`;
-    }
-}
+            const selectedStationButton = Array.from(stationButtons).find(button => button.getAttribute('data-src') === source);
+            
+            if (selectedStationButton) {
+                const selectedStation = `<b style="font-size: ${parseFloat(window.getComputedStyle(streamNameElement).fontSize) + 3}px;">${selectedStationButton.textContent}</b>`;
+                streamNameElement.innerHTML = `STREAM: ${selectedStation}`;
+                sourceWebsiteElement.textContent = `SOURCE: ${source}`;
+            } else {
+                // Handle the case where the source does not match any station
+                streamNameElement.textContent = `STREAM: Unknown Station`;
+                sourceWebsiteElement.textContent = `SOURCE: ${source}`;
+            }
+        }
 
 
         </script> <!-- Link to player JS -->
