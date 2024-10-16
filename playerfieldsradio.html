@@ -19,6 +19,7 @@
     overflow: hidden;
 
 }
+
 .station-name {
     display: none;
     width: 0;
@@ -37,9 +38,13 @@
     border-style: double;
     padding: 10px;
     max-width: 100%; /* or any other fixed width value */
-    min-width: 60%;
+    min-width: 20%;
     mix-blend-mode: difference;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
 }
+
 .audio-player {
     width: 98%; /* or any other fixed width value */    background-color: #FFF170;
     border: 1px solid #000000; /* Neon green border */
@@ -139,11 +144,7 @@ transform: translateX(0); /* Hold position on the right */
 
 
 
-.metadata {
-    margin-right: 20px;
-    font-size: 20px;
-    
-}
+
 .volume-control {
     margin-right: 20px;
 }
@@ -237,7 +238,7 @@ transform: translateX(0); /* Hold position on the right */
     .metadata {
         margin: 8px 0; /* Space for metadata */
         font-size: 10px; /* Font size for metadata */
-        text-align: center; /* Center text */
+        text-align: center !important; /* Center text */
     }
 
     .volume-control {
@@ -256,9 +257,8 @@ transform: translateX(0); /* Hold position on the right */
             <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
         </div>
         
-        <div class="metadata" id="metadata" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div class="metadata" id="metadata" style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
             <div id="streamName">STREAM: LOADING...</div>
-            <div id="sourceWebsite">SOURCE: LOADING...</div>
         </div>
         <div class="progress" id="progress">
             <div class="progress-fill" id="progressFill"></div>
@@ -300,7 +300,12 @@ transform: translateX(0); /* Hold position on the right */
         const sourceWebsiteElement = document.getElementById('sourceWebsite');
         const volumeSlider = document.getElementById('volumeSlider');
         const stationButtons = document.querySelectorAll('.station-button');
-
+        document.getElementById('fileButton').addEventListener('click', function() {
+    audio.src = 'trasim_KINKED.mp3'; // Set the audio source to fields.mp3
+    audio.play(); // Play the audio file
+    playButton.textContent = '❚❚'; // Change to pause icon
+    streamNameElement.textContent = 'STREAM: Trasimeno_KINKED.mp3'; // Update stream name
+});
 // Update the station buttons with numbers
 stationButtons.forEach((button, index) => {
     button.setAttribute('data-number', index + 1); // Set the data-number attribute
@@ -359,14 +364,14 @@ stationButtons.forEach((button, index) => {
         // Initialize metadata on page load
         updateMetadata(audio.src);
 
-        // File button functionality to play fields.mp3
-        fileButton.addEventListener('click', () => {
-    audio.src = 'Trasim_KINKED.mp3'; // Set the audio source to fields.mp3
+       // File button functionality to play fields.mp3
+       fileButton.addEventListener('click', () => {
+    audio.src = 'trasim_KINKED.mp3'; // Set the audio source to fields.mp3
     audio.play(); // Play the audio file
     playButton.textContent = '❚❚'; // Change to pause icon
     streamNameElement.textContent = 'STREAM: Trasimeno_KINKED.mp3'; // Update stream name
-    sourceWebsiteElement.textContent = 'SOURCE: .mp3'; // Update source website
 });
+
 
         
 document.getElementById('addStationButton').addEventListener('click', function() {
